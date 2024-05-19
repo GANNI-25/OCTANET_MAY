@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .input-field {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .input-field input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        .input-field button {
+            padding: 10px 20px;
+            background-color: #4caf50;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        li:last-child {
+            border-bottom: none;
+        }
+        .task-actions button {
+            padding: 5px 10px;
+            margin-right: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="input-field">
+            <input type="text" id="taskInput" placeholder="Add new task...">
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+        <ul id="taskList">
+            <!-- Tasks will be added dynamically here -->
+        </ul>
+        <div class="task-actions">
+            <button id="markCompleteBtn">Mark Selected as Complete</button>
+            <button id="deleteSelectedBtn">Delete Selected</button>
+        </div>
+        <ul id="completedTasks">
+            <!-- Completed tasks will be added dynamically here -->
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskInput = document.getElementById('taskInput');
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const taskList = document.getElementById('taskList');
+            const markCompleteBtn = document.getElementById('markCompleteBtn');
+            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+            const completedTasks = document.getElementById('completedTasks');
+
+            addTaskBtn.addEventListener('click', function() {
+                if (taskInput.value.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <input type="checkbox">
+                        <span>${taskInput.value}</span>
+                        <button class="deleteBtn">Delete</button>
+                    `;
+                    taskList.appendChild(li);
+                    taskInput.value = '';
+                }
+            });
+
+            taskList.addEventListener('click', function(event) {
+                if (event.target.tagName === 'BUTTON' && event.target.classList.contains('deleteBtn')) {
+                    event.target.parentElement.remove();
+                }
+            });
+
+            markCompleteBtn.addEventListener('click', function() {
+                const checkboxes = taskList.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        const li = checkbox.parentElement;
+                        li.classList.toggle('completed');
+                        completedTasks.appendChild(li);
+                    }
+                });
+            });
+
+            deleteSelectedBtn.addEventListener('click', function() {
+                const completedCheckboxes = completedTasks.querySelectorAll('input[type="checkbox"]');
+                completedCheckboxes.forEach(function(checkbox) {
+                    if (checkbox.checked) {
+                        checkbox.parentElement.remove();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
